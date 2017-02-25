@@ -308,7 +308,6 @@ public class AC_MethodAnalyzerTest implements IProbeIdGenerator {
 	}
 
 	// === Scenario: loops ===
-	// TODO: construct at least one program that has a loop and test it
 	// similarly to the other scenarios.
 
 	//article: http://blog.jamesdbloom.com/JavaCodeToByteCode_PartOne.html#while_loop
@@ -332,6 +331,52 @@ public class AC_MethodAnalyzerTest implements IProbeIdGenerator {
 		method.visitLabel(l2);
 		method.visitLineNumber(1003, l2);
 		method.visitInsn(Opcodes.RETURN);
+	}
+
+	@Test
+	public void testLoopCovered1() {
+		createLoop();
+		probes[0] = true;
+		runMethodAnalzer();
+
+		assertLine(1001, 0, 2, 0, 0);
+		assertLine(1002, 5, 0, 2, 0);
+		assertLine(1003, 1, 0, 0, 0);
+	}
+
+	@Test
+	public void testLoopCovered2() {
+		createLoop();
+		probes[0] = true;
+		probes[1] = true;
+		runMethodAnalzer();
+
+		assertLine(1001, 0, 2, 0, 0);
+		assertLine(1002, 0, 5, 1, 1);
+		assertLine(1003, 1, 0, 0, 0);
+	}
+
+	@Test
+	public void testLoopCovered3() {
+		createLoop();
+		probes[0] = true;
+		probes[1] = true;
+		probes[2] = true;
+		runMethodAnalzer();
+
+		assertLine(1001, 0, 2, 0, 0);
+		assertLine(1002, 0, 5, 0, 2);
+		assertLine(1003, 0, 1, 0, 0);
+	}
+
+	@Test
+	public void testLoopNotCovered() {
+		createLoop();
+		runMethodAnalzer();
+
+		assertLine(1001, 2, 0, 0, 0);
+		assertLine(1002, 5, 0, 2, 0);
+		assertLine(1003, 1, 0, 0, 0);
 	}
 
 	private void runMethodAnalzer() {
