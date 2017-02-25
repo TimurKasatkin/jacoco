@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Marc R. Hoffmann - initial API and implementation
- *    
+ *
  *******************************************************************************/
 package org.jacoco.core.internal.analysis;
 
@@ -311,8 +311,22 @@ public class AC_MethodAnalyzerTest implements IProbeIdGenerator {
 	// TODO: construct at least one program that has a loop and test it
 	// similarly to the other scenarios.
 
+	//article: http://blog.jamesdbloom.com/JavaCodeToByteCode_PartOne.html#while_loop
+	//docs: http://asm.ow2.org/asm40/javadoc/user/org/objectweb/asm/Opcodes.html
+	//docs: http://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html
 	private void createLoop() {
-		// TODO: implement
+		final Label l0 = new Label();
+		method.visitLabel(l0);
+		method.visitLineNumber(1001, l0);
+		method.visitVarInsn(Opcodes.ILOAD, 1);
+		Label l1 = new Label();
+		method.visitInsn(Opcodes.IF_ICMPGE, 10);
+		method.visitLabel(l0);
+		method.visitInsn(Opcodes.IINC, 1);
+		method.visitJumpInsn(Opcodes.GOTO, l1);
+		method.visitLabel(l1);
+		method.visitLineNumber(1002, l1);
+		method.visitInsn(Opcodes.RETURN);
 	}
 
 	private void runMethodAnalzer() {
