@@ -318,14 +318,19 @@ public class AC_MethodAnalyzerTest implements IProbeIdGenerator {
 		final Label l0 = new Label();
 		method.visitLabel(l0);
 		method.visitLineNumber(1001, l0);
-		method.visitVarInsn(Opcodes.ILOAD, 1);
-		Label l1 = new Label();
-		method.visitInsn(Opcodes.IF_ICMPGE, 10);
-		method.visitLabel(l0);
-		method.visitInsn(Opcodes.IINC, 1);
-		method.visitJumpInsn(Opcodes.GOTO, l1);
+		method.visitInsn(Opcodes.ICONST_0);
+		method.visitVarInsn(Opcodes.ISTORE, 1);
+		final Label l1 = new Label();
 		method.visitLabel(l1);
 		method.visitLineNumber(1002, l1);
+		method.visitVarInsn(Opcodes.ILOAD, 1);
+		method.visitInsn(Opcodes.ICONST_5);
+		final Label l2 = new Label();
+		method.visitJumpInsn(Opcodes.IF_ICMPGE, l2);
+		method.visitIincInsn(1, 1);
+		method.visitJumpInsn(Opcodes.GOTO, l1);
+		method.visitLabel(l2);
+		method.visitLineNumber(1003, l2);
 		method.visitInsn(Opcodes.RETURN);
 	}
 
